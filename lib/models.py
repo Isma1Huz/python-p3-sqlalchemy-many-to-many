@@ -39,3 +39,28 @@ class Review(Base):
         return f'Review(id={self.id}, ' + \
             f'score={self.score}, ' + \
             f'game_id={self.game_id})'
+# models.py
+
+game_user = Table(
+    'game_users',
+    Base.metadata,
+    Column('game_id', ForeignKey('games.id'), primary_key=True),
+    Column('user_id', ForeignKey('users.id'), primary_key=True),
+    extend_existing=True,
+)
+
+class Game(Base):
+
+    # tablename, columns
+
+    users = relationship('User', secondary=game_user, back_populates='games')
+
+    # __repr__()
+
+class User(Base):
+
+    # tablenames, columns
+
+    games = relationship('Game', secondary=game_user, back_populates='users')
+
+    # __repr__()
